@@ -4,9 +4,9 @@
 
 {% for guitar in guitars %}
 
-    <div class="card">
+    <div class="card blue-grey lighten-2">
         <a href="{% url 'detail' guitar.id %}">
-            <div class="card-content">
+            <div class="card-content indigo-text darken-4">
                 <span class="card-title">{{ guitar.brand }} {{ guitar.model }}</span>
                 <p>Year: {{ guitar.year }}</p>
                 <p>Description: {{ guitar.description }}</p>

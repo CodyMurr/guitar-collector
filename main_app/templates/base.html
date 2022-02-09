@@ -7,15 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<body class="grey lighten-1">
     <header>
-        <nav>
-            <div>
-                <a href="{% url 'home' %}">GuitarCollector</a>
-                <ul>
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'index' %}">View All Guitars</a></li>
+        <nav class="nav-extended grey darken-4">
+            <div class="nav-wrapper">
+                <a href="{% url 'home' %}" class="brand-logo center">GuitarCollector</a>
+            </div>
+            <div class="nav-content">
+                <ul class="tabs tabs-transparent">
+                    <li class="tab"><a href="{% url 'about' %}">About</a></li>
+                    <li class="tab"><a href="{% url 'index' %}">View All Guitars</a></li>
                 </ul>
             </div>
         </nav>
