@@ -1,7 +1,8 @@
 from dataclasses import fields
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Guitar
+from django.views.generic import ListView, DetailView
+from .models import Guitar, Accessory
 # Create your views here.
 
 def home(request):
@@ -16,12 +17,18 @@ def guitars_index(request):
 
 def guitars_detail(request, guitar_id):
     guitar = Guitar.objects.get(id=guitar_id)
-    return render(request, 'guitars/detail.html', { 'guitar': guitar })
+    accessory_ids = guitar.accessories.all().values_list('id')
+    accessories = Accessory.objects.exclude(id__in=accessory_ids)
+    return render(request, 'guitars/detail.html', { 
+        'guitar': guitar,
+        'accessories': accessories
+    })
+
+# Class-Based Views
 
 class GuitarCreate(CreateView):
     model = Guitar
     fields = '__all__'
-    success_url = '/guitars/'
 
 class GuitarUpdate(UpdateView):
     model = Guitar
@@ -29,4 +36,27 @@ class GuitarUpdate(UpdateView):
 
 class GuitarDelete(DeleteView):
     model = Guitar
-    success_url = '/guitars/'
+    success_url = '/guitars/index.html'
+
+class AccessoryList(ListView):
+    model = Accessory
+
+class AccessoryDetail(DetailView):
+    model = Accessory
+
+class AccessoryCreate(CreateView):
+    model = Accessory
+    fields = '__all__'
+
+class AccessoryUpdate(UpdateView):
+    model = Accessory
+    fields = '__all__'
+
+class AccessoryDelete(DeleteView):
+    model = Accessory
+    success_url = '/accessories/'
+
+def assoc_accessory(request, guitar_id, accessory_id):
+    guitar = Guitar.objects.get(id=guitar_id)
+    guitar.accessories.add(accessory_id)
+    return redirect('detail', guitar_id=guitar_id)
