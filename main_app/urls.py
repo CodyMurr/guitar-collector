@@ -6,4 +6,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('guitars/index/', views.guitars_index, name='index'),
     path('guitars/<int:guitar_id>/', views.guitars_detail, name='detail'),
+    path('guitars/create/', views.GuitarCreate.as_view(), name='guitars_create'),
 ]
