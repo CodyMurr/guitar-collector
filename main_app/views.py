@@ -1,8 +1,9 @@
-from dataclasses import fields
+from secrets import token_bytes
 from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from .models import Guitar, Accessory
+from .forms import StringingForm
 # Create your views here.
 
 def home(request):
@@ -17,10 +18,12 @@ def guitars_index(request):
 
 def guitars_detail(request, guitar_id):
     guitar = Guitar.objects.get(id=guitar_id)
+    stringing_form = StringingForm()
     accessory_ids = guitar.accessories.all().values_list('id')
     accessories = Accessory.objects.exclude(id__in=accessory_ids)
     return render(request, 'guitars/detail.html', { 
         'guitar': guitar,
+        'stringing_form': stringing_form,
         'accessories': accessories
     })
 
@@ -36,7 +39,15 @@ class GuitarUpdate(UpdateView):
 
 class GuitarDelete(DeleteView):
     model = Guitar
-    success_url = '/guitars/index.html'
+    success_url = '/guitars/'
+
+def add_stringing(request, guitar_id):
+    form = StringingForm(request.POST)
+    if form.is_valid():
+        new_stringing = form.save(commit=False)
+        new_stringing.guitar_id = guitar_id
+        new_stringing.save()
+    return redirect('detail', guitar_id=guitar_id)
 
 class AccessoryList(ListView):
     model = Accessory
