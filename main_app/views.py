@@ -21,3 +21,12 @@ def guitars_detail(request, guitar_id):
 class GuitarCreate(CreateView):
     model = Guitar
     fields = '__all__'
+    success_url = '/guitars/'
+
+class GuitarUpdate(UpdateView):
+    model = Guitar
+    fields = '__all__'
+
+class GuitarDelete(DeleteView):
+    model = Guitar
+    success_url = '/guitars/'
