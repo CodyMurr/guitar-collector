@@ -9,6 +9,17 @@
     <title>Document</title>
 </head>
 <body>
+    <header>
+        <nav>
+            <div>
+                <a href="{% url 'home' %}">GuitarCollector</a>
+                <ul>
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'index' %}">View All Guitars</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
     {% block content %}
     {% endblock %}
 </body>
