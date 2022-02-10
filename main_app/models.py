@@ -1,4 +1,3 @@
-import datetime
 from django.db import models
 from django.urls import reverse
 from datetime import date
@@ -51,4 +50,4 @@ class Stringing(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return f"Changed to {self.get_gauge_display()} {self.brand} on {self.date_changed}"
+        return f"Changed to {self.get_gauge_display()} {self.brand} on {self.date}"

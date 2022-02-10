@@ -15,7 +15,7 @@
                 <a href="{% url 'guitars_delete' guitar.id %}">Delete</a>
             </div>
         </div>
-        <div class="col center">
+        <div class="col">
             <form action="{% url 'add_stringing' guitar.id %}" method="POST" class="center">
                 {% csrf_token %}
                 {{ stringing_form.as_p }}
@@ -24,7 +24,7 @@
             </form>
             <br>
         </div>
-        <table class="striped">
+        <table class="striped col">
             <thead>
                 <tr>
                     <th>Date Changed</th>
@@ -69,7 +69,7 @@
 </div>
 
 <script>
-    
+
     const dateEl = document.getElementById('id_date');
     M.Datepicker.init(dateEl, {
         format: 'mm-dd-yyyy',
