@@ -31,7 +31,7 @@ def guitars_detail(request, guitar_id):
 
 class GuitarCreate(CreateView):
     model = Guitar
-    fields = '__all__'
+    fields = ['brand', 'model', 'description']
 
 class GuitarUpdate(UpdateView):
     model = Guitar
@@ -70,4 +70,9 @@ class AccessoryDelete(DeleteView):
 def assoc_accessory(request, guitar_id, accessory_id):
     guitar = Guitar.objects.get(id=guitar_id)
     guitar.accessories.add(accessory_id)
+    return redirect('detail', guitar_id=guitar_id)
+
+def unassoc_accessory(request, guitar_id, accessory_id):
+    guitar = Guitar.objects.get(id=guitar_id)
+    guitar.accessories.remove(accessory_id)
     return redirect('detail', guitar_id=guitar_id)

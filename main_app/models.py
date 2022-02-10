@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.urls import reverse
 from datetime import date
@@ -33,6 +34,7 @@ class Guitar(models.Model):
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'guitar_id': self.id})
+
 
 class Stringing(models.Model):
     date = models.DateField()

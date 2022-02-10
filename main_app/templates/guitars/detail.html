@@ -2,15 +2,84 @@
 
 {% block content %}
 
-    <div class="card">
-        <div class="card-content">
-            <span class="card-title">{{ guitar.brand }} {{ guitar.model }}</span>
-            <p>Description: {{ guitar.description }}</p>
+<h1 class="center">Guitar Details</h1>
+<div class="row center">
+    <div class="col">
+        <div class="card center">
+            <div class="card-content">
+                <span class="card-title">{{ guitar.brand }} {{ guitar.model }}</span>
+                <p>Description: {{ guitar.description }}</p>
+            </div>
+            <div class="card-action">
+                <a href="{% url 'guitars_update' guitar.id %}">Edit</a>
+                <a href="{% url 'guitars_delete' guitar.id %}">Delete</a>
+            </div>
         </div>
-        <div class="card-action">
-            <a href="{% url 'guitars_update' guitar.id %}">Edit</a>
-            <a href="{% url 'guitars_delete' guitar.id %}">Delete</a>
+        <div class="col center">
+            <form action="{% url 'add_stringing' guitar.id %}" method="POST" class="center">
+                {% csrf_token %}
+                {{ stringing_form.as_p }}
+                <br>
+                <input type="submit" class="btn" value="Add String Change">
+            </form>
+            <br>
         </div>
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Date Changed</th>
+                    <th>Brand</th>
+                    <th>Gauge</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stringing in guitar.stringing_set.all %}
+                    <tr>
+                        <td>{{ stringing.date }}</td>
+                        <td>{{ stringing.brand }}</td>
+                        <td>{{ stringing.get_gauge_display }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col">
+        <h3 class="center">{{ guitar.brand }} {{ guitar.model }} Accessories</h3>
+        {% if guitar.accessories.count %}
+            {% for accessory in guitar.accessories.all %}
+                <div class="card">
+                    <div class="card-content">
+                        <p>{{ accessory.brand }} {{ accessory.name }}</p>
+                    </div>
+                    <div class="card-action">
+                        <form action="{% url 'unassoc_accessory' guitar.id accessory.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" value="Remove" class="btn">
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3>No Accessories</h3>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    
+    const dateEl = document.getElementById('id_date');
+    M.Datepicker.init(dateEl, {
+        format: 'mm-dd-yyyy',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
+    });
+
+    const selectEl = document.getElementById('id_gauge');
+    M.FormSelect.init(selectEl);
+</script>
 
 {% endblock %}

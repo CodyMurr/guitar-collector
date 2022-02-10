@@ -2,3 +2,6 @@ a {
     font-size: 1.5em;
 }
 
+table {
+    width: 100vw;
+}
