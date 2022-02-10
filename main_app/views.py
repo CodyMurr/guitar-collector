@@ -1,5 +1,5 @@
 from secrets import token_bytes
-from django.shortcuts import redirect, render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from .models import Guitar, Accessory
@@ -35,7 +35,7 @@ class GuitarCreate(CreateView):
 
 class GuitarUpdate(UpdateView):
     model = Guitar
-    fields = '__all__'
+    fields = ['brand', 'model', 'description']
 
 class GuitarDelete(DeleteView):
     model = Guitar
@@ -61,7 +61,7 @@ class AccessoryCreate(CreateView):
 
 class AccessoryUpdate(UpdateView):
     model = Accessory
-    fields = '__all__'
+    fields = ['brand', 'name', 'accessory_type']
 
 class AccessoryDelete(DeleteView):
     model = Accessory
