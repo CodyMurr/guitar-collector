@@ -3,6 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Guitar, Accessory
 from .forms import StringingForm
 # Create your views here.
@@ -13,10 +15,13 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+@login_required
 def guitars_index(request):
-    guitars = Guitar.objects.all()
+    guitars = Guitar.objects.filter(user=request.user)
+
     return render(request, 'guitars/index.html', { 'guitars': guitars})
 
+@login_required
 def guitars_detail(request, guitar_id):
     guitar = Guitar.objects.get(id=guitar_id)
     stringing_form = StringingForm()
@@ -30,21 +35,24 @@ def guitars_detail(request, guitar_id):
 
 # Class-Based Views
 
-class GuitarCreate(CreateView):
+class GuitarCreate(LoginRequiredMixin, CreateView):
     model = Guitar
     fields = ['brand', 'model', 'description']
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class GuitarUpdate(UpdateView):
+
+class GuitarUpdate(LoginRequiredMixin, UpdateView):
     model = Guitar
     fields = ['brand', 'model', 'description']
 
-class GuitarDelete(DeleteView):
+
+class GuitarDelete(LoginRequiredMixin, DeleteView):
     model = Guitar
     success_url = '/guitars/'
 
+@login_required
 def add_stringing(request, guitar_id):
     form = StringingForm(request.POST)
     if form.is_valid():
@@ -53,29 +61,31 @@ def add_stringing(request, guitar_id):
         new_stringing.save()
     return redirect('detail', guitar_id=guitar_id)
 
-class AccessoryList(ListView):
+class AccessoryList(LoginRequiredMixin, ListView):
     model = Accessory
 
-class AccessoryDetail(DetailView):
+class AccessoryDetail(LoginRequiredMixin, DetailView):
     model = Accessory
 
-class AccessoryCreate(CreateView):
+class AccessoryCreate(LoginRequiredMixin, CreateView):
     model = Accessory
     fields = '__all__'
 
-class AccessoryUpdate(UpdateView):
+class AccessoryUpdate(LoginRequiredMixin, UpdateView):
     model = Accessory
     fields = ['brand', 'name', 'accessory_type']
 
-class AccessoryDelete(DeleteView):
+class AccessoryDelete(LoginRequiredMixin, DeleteView):
     model = Accessory
     success_url = '/accessories/'
 
+@login_required
 def assoc_accessory(request, guitar_id, accessory_id):
     guitar = Guitar.objects.get(id=guitar_id)
     guitar.accessories.add(accessory_id)
     return redirect('detail', guitar_id=guitar_id)
 
+@login_required
 def unassoc_accessory(request, guitar_id, accessory_id):
     guitar = Guitar.objects.get(id=guitar_id)
     guitar.accessories.remove(accessory_id)
