@@ -16,15 +16,21 @@
     <header>
         <nav class="nav-extended grey darken-4">
             <div class="nav-wrapper">
-                <a href="{% url 'home' %}" class="brand-logo right">GuitarCollector</a>
+                <a href="{% url 'home' %}" class="brand-logo right" style="font-family: 'Lobster', cursive;">GuitarCollector</a>
             </div>
             <div class="nav-content">
                 <ul class="tabs tabs-transparent">
                     <li class="tab"><a href="{% url 'about' %}">About</a></li>
-                    <li class="tab"><a href="{% url 'accessories_create' %}">Add Accessory</a></li>
-                    <li class="tab"><a href="{% url 'accessories_index' %}">View All Accessories</a></li>
-                    <li class="tab"><a href="{% url 'guitars_create' %}">Add Guitar</a></li>
-                    <li class="tab"><a href="{% url 'index' %}">View All Guitars</a></li>
+                    {% if user.is_authenticated %}
+                        <li class="tab"><a href="{% url 'accessories_create' %}">Add Accessory</a></li>
+                        <li class="tab"><a href="{% url 'accessories_index' %}">View All Accessories</a></li>
+                        <li class="tab"><a href="{% url 'guitars_create' %}">Add Guitar</a></li>
+                        <li class="tab"><a href="{% url 'index' %}">View All Guitars</a></li>
+                        <li class="tab"><a href="{% url 'logout' %}">Log Out</a></li>
+                    {% else %}
+                        <li class="tab"><a href="{% url 'signup' %}">Sign Up</a></li>
+                        <li class="tab"><a href="{% url 'login' %}">Log In</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
