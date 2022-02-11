@@ -43,7 +43,6 @@ class Stringing(models.Model):
         choices=GAUGES,
         default=GAUGES[1][0]
     )
-
     guitar = models.ForeignKey(Guitar, on_delete=models.CASCADE)
 
     class Meta:
